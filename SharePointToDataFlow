@@ -1,0 +1,9 @@
+let
+  Source = SharePoint.Tables("https://YourList.sharepoint.com/", [Implementation = null, ApiVersion = 15]),
+  Navigation = Source{[Id = "ca0000000000000000000secretIDf"]}[Items],
+  #"Removed columns" = Table.RemoveColumns(Navigation, {"FileSystemObjectType", "Id", "ServerRedirectedEmbedUri", "ServerRedirectedEmbedUrl", "ContentTypeId", "Title", "OData__ColorTag", "ComplianceAssetId"}),
+  #"Changed column type" = Table.TransformColumnTypes(#"Removed columns", {{"field_0", type date}}),
+  #"Renamed columns" = Table.RenameColumns(#"Changed column type", {{"field_2", "High"}, {"field_3", "Low"}, {"field_4", "Close"}, {"field_5", "Adjusted_Close"}, {"field_6", "Volume"}}),
+  #"Removed columns 1" = Table.RemoveColumns(#"Renamed columns", {"ID", "Modified", "Created", "AuthorId", "EditorId", "OData__UIVersionString", "Attachments", "GUID", "FirstUniqueAncestorSecurableObject", "RoleAssignments", "AttachmentFiles", "ContentType", "GetDlpPolicyTip", "FieldValuesAsHtml", "FieldValuesAsText", "FieldValuesForEdit", "File", "Folder", "LikedByInformation", "ParentList", "Properties", "Versions", "Author", "Editor"})
+in
+  #"Removed columns 1"
